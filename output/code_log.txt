@@ -1,0 +1,12 @@
+2025-Sep-07-04:18:07 : ETL Job Started
+2025-Sep-07-04:18:07 : Preliminaries complete. Initiating ETL process
+2025-Sep-07-04:18:07 : Data extraction from HTML Webpage complete. Initiating Transformation process
+2025-Sep-07-04:18:07 : Data transformation complete. Initiating loading process
+2025-Sep-07-04:18:07 : Data saved to CSV file
+2025-Sep-07-04:18:07 : SQL Connection initiated
+2025-Sep-07-04:18:07 : Data loaded to Database as table. Running the query
+2025-Sep-07-04:18:07 : Query executed: SELECT * FROM Largest_banks
+2025-Sep-07-04:18:07 : Query executed: SELECT AVG(MC_GBP_Billion) FROM Largest_banks
+2025-Sep-07-04:18:07 : Query executed: SELECT Name FROM Largest_banks LIMIT 5
+2025-Sep-07-04:18:07 : SQL Connection closed
+2025-Sep-07-04:18:07 : ETL Job Ended
