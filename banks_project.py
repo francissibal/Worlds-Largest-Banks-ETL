@@ -59,7 +59,7 @@ def extract(url, table_attribs):
     log_progress('Data extraction from HTML Webpage complete. Initiating Transformation process')
     return df
 
-# --- Task 3: Transformation Function (UPDATED) ---
+# --- Task 3: Transformation Function ---
 def transform(df, csv_path=None):  # csv_path is no longer needed but kept for consistency
     """
     Transforms the dataframe by adding market capitalization in GBP, EUR, and INR.
@@ -139,3 +139,4 @@ if __name__ == '__main__':
     print(f" - {OUTPUT_CSV_PATH}")
     print(f" - {DB_NAME}")
     print(f" - {LOG_FILE}")
+
