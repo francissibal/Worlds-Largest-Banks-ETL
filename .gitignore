@@ -1,0 +1,24 @@
+# Python bytecode and cache
+__pycache__/
+*.pyc
+
+# Virtual environment folders (common names)
+venv/
+.venv/
+env/
+.env/
+
+# Environment variables file (DO NOT COMMIT SECRETS!)
+.env
+*.env
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# IDE and editor configuration folders
+.idea/
+.vscode/
+
+# Log files
+*.log
