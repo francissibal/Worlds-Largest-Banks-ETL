@@ -173,54 +173,66 @@ if __name__ == '__main__':
 ### 📊 Final Output
 Running the script produces the following output in the console, showing the successful extraction, transformation, and querying of the data.
 
+
+#### Extracted Data (Top 10 Banks)
+| Rank | Name                                    | MC_USD_Billion |
+|------|-----------------------------------------|----------------|
+| 1    | JPMorgan Chase                          | 599.931        |
+| 2    | Bank of America                         | 307.900        |
+| 3    | Industrial and Commercial Bank of China | 303.543        |
+| 4    | Agricultural Bank of China              | 232.836        |
+| 5    | Bank of China                           | 209.295        |
+| 6    | China Construction Bank                 | 192.715        |
+| 7    | Wells Fargo                             | 192.279        |
+| 8    | HSBC                                    | 163.544        |
+| 9    | Commonwealth Bank                       | 156.639        |
+| 10   | Goldman Sachs                           | 156.356        |
+
+
+#### Transformed Data (with additional currencies) 
+| Rank | Name                                    | MC_USD_Billion | MC_GBP_Billion | MC_EUR_Billion | MC_INR_Billion |
+|------|-----------------------------------------|----------------|----------------|----------------|----------------|
+| 1    | JPMorgan Chase                          | 599.931        | 479.94         | 557.94         | 49992.25       |
+| 2    | Bank of America                         | 307.900        | 246.32         | 286.35         | 25657.31       |
+| 3    | Industrial and Commercial Bank of China | 303.543        | 242.83         | 282.29         | 25294.24       |
+| 4    | Agricultural Bank of China              | 232.836        | 186.27         | 216.54         | 19402.22       |
+| 5    | Bank of China                           | 209.295        | 167.44         | 194.64         | 17440.55       |
+| 6    | China Construction Bank                 | 192.715        | 154.17         | 179.22         | 16058.94       |
+| 7    | Wells Fargo                             | 192.279        | 153.82         | 178.82         | 16022.61       |
+| 8    | HSBC                                    | 163.544        | 130.84         | 152.10         | 13628.12       |
+| 9    | Commonwealth Bank                       | 156.639        | 125.31         | 145.67         | 13052.73       |
+| 10   | Goldman Sachs                           | 156.356        | 125.08         | 145.41         | 13029.15       |
+
+
+### Running Queries on the Database 
+#### Query 1:
+```SQL
+SELECT * FROM Largest_banks
 ```
---- Extracted Data (Top 10 Banks) ---
-                                        Name  MC_USD_Billion
-0                             JPMorgan Chase         599.931
-1                            Bank of America         307.900
-2  Industrial and Commercial Bank of China         303.543
-3             Agricultural Bank of China         232.836
-4                            Bank of China         209.295
-5              China Construction Bank         192.715
-6                                Wells Fargo         192.279
-7                                       HSBC         163.544
-8                       Commonwealth Bank         156.639
-9                            Goldman Sachs         156.356
-------------------------------
-
---- Transformed Data (with additional currencies) ---
-                                        Name  MC_USD_Billion  MC_GBP_Billion  MC_EUR_Billion  MC_INR_Billion
-0                             JPMorgan Chase         599.931          479.94          557.94        49992.25
-1                            Bank of America         307.900          246.32          286.35        25657.31
-2  Industrial and Commercial Bank of China         303.543          242.83          282.29        25294.24
-3             Agricultural Bank of China         232.836          186.27          216.54        19402.22
-4                            Bank of China         209.295          167.44          194.64        17440.55
-5              China Construction Bank         192.715          154.17          179.22        16058.94
-6                                Wells Fargo         192.279          153.82          178.82        16022.61
-7                                       HSBC         163.544          130.84          152.10        13628.12
-8                       Commonwealth Bank         156.639          125.31          145.67        13052.73
-9                            Goldman Sachs         156.356          125.08          145.41        13029.15
-------------------------------
-
---- Running Queries on the Database ---
-Executing query: SELECT * FROM Largest_banks
 (Output is identical to the Transformed Data table above)
-------------------------------
 
-Executing query: SELECT AVG(MC_GBP_Billion) FROM Largest_banks
-   AVG(MC_GBP_Billion)
-0              201.202
-------------------------------
-
-Executing query: SELECT Name FROM Largest_banks LIMIT 5
-                                        Name
-0                             JPMorgan Chase
-1                            Bank of America
-2  Industrial and Commercial Bank of China
-3             Agricultural Bank of China
-4                            Bank of China
-------------------------------
+#### Query 2:
+```SQL
+SELECT AVG(MC_GBP_Billion) FROM Largest_banks
 ```
+| AVG(MC_GBP_Billion) |
+|----------------------|
+| 201.202              |
+
+
+#### Query 3:
+```SQL
+SELECT Name FROM Largest_banks LIMIT 5
+```
+| Name                                    |
+|-----------------------------------------|
+| JPMorgan Chase                          |
+| Bank of America                         |
+| Industrial and Commercial Bank of China |
+| Agricultural Bank of China              |
+| Bank of China                           |
+
+
 ## Project Outputs
 
 * **`banks_project.py`:** The main Python script containing the full ETL logic.
