@@ -10,28 +10,6 @@ This project demonstrates skills in web scraping, data cleaning and transformati
 
 * **Webpage:** [List of largest banks - Wikipedia](https://en.wikipedia.org/wiki/List_of_largest_banks)
 * **Target Table:** The data is extracted from the table under the "By market capitalization" section.
-
-## How to Run
-
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/francissibal/Worlds-Largest-Banks-ETL.git](https://github.com/francissibal/Worlds-Largest-Banks-ETL.git)
-    cd Worlds-Largest-Banks-ETL
-    ```
-
-2.  **Install dependencies:**
-    ```bash
-    pip install requests beautifulsoup4 pandas
-    ```
-
-3.  **Run the script:**
-    ```bash
-    python banks_project.py
-    ```
-
-4.  **Verify the output:**
-    * Check for the creation of `largest_banks_data.csv` and `banks.db` in the `/output/` directory.
-    * Review the `code_log.txt` file for a step-by-step log of the successful execution.
   
 ## 💻 Code Implementation Walkthrough
 This section provides a detailed breakdown of the banks_project.py script, explaining each component of the ETL pipeline step-by-step.
@@ -278,6 +256,27 @@ SELECT Name FROM Largest_banks LIMIT 5
 * **`/output/banks.db`:** The SQLite database containing the final dataset.
 * **`/output/code_log.txt`:** A log file detailing the execution flow of the script.
 
-## Troubleshooting Note
+## How to Run
 
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/francissibal/Worlds-Largest-Banks-ETL.git](https://github.com/francissibal/Worlds-Largest-Banks-ETL.git)
+    cd Worlds-Largest-Banks-ETL
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    pip install requests beautifulsoup4 pandas
+    ```
+
+3.  **Run the script:**
+    ```bash
+    python banks_project.py
+    ```
+
+4.  **Verify the output:**
+    * Check for the creation of `largest_banks_data.csv` and `banks.db` in the `/output/` directory.
+    * Review the `code_log.txt` file for a step-by-step log of the successful execution.
+
+## Troubleshooting Note
 During development, the target webpage's HTML structure, as seen by the script, was different from the browser's view. A diagnostic script (`troubleshooting/diagnostics.py`) was created to save the raw HTML received by Python. This allowed for accurate analysis and the creation of a robust final parser.
