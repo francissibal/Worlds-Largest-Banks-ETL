@@ -405,4 +405,4 @@ SELECT Name FROM Largest_banks LIMIT 5
 
 
 ## Troubleshooting Note
-During development, the target webpage's HTML structure, as seen by the script, was different from the browser's view. A diagnostic script (`troubleshooting/diagnostics.py`) was created to save the raw HTML received by Python. This allowed for accurate analysis and the creation of a robust final parser.
+During development, the target webpage's HTML structure, as seen by the script, was different from the browser's view. A diagnostic script (`troubleshooting/diagnostics.py`) was created to save the raw HTML received by Python.
