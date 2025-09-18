@@ -12,7 +12,7 @@
 
 
 ## Executive Summary
-This project successfully developed an automated ETL (Extract, Transform, Load) pipeline to address the firm's need for competitive financial data. The solution automatically extracts data on the world's top 10 largest banks from Wikipedia, transforms the market capitalization into key international currencies (GBP, EUR, INR), and loads it into both a flexible CSV file and a structured SQLite database. This provides the consulting team with a reliable, queryable, and up-to-date dataset, saving significant manual effort and ensuring data accuracy for strategic analysis. The entire process is logged to guarantee data integrity and traceability.
+This project successfully developed an automated ETL (Extract, Transform, Load) pipeline to address the firm's need for competitive financial data. The solution automatically extracts data on the world's top 10 largest banks from Wikipedia, transforms the market capitalization into key international currencies (GBP, EUR, PHP), and loads it into both a flexible CSV file and a structured SQLite database. This provides the consulting team with a reliable, queryable, and up-to-date dataset, saving significant manual effort and ensuring data accuracy for strategic analysis. The entire process is logged to guarantee data integrity and traceability.
 
 **Problem:** Manually tracking this data is time-consuming, prone to human error, and inefficient. The firm needs an automated solution to gather, process, and store this data reliably, enabling analysts to access clean, multi-currency financial data on demand for their reports and client presentations.
 
@@ -26,7 +26,7 @@ This project successfully developed an automated ETL (Extract, Transform, Load) 
 **Business Requirements:**
 * **Data Source:** The system must extract data from the "By market capitalization" table on the designated Wikipedia page.
 * **Data Scope:** The pipeline must capture the bank's name and its market capitalization in USD for the top 10 institutions listed.
-* **Data Enrichment:** The market capitalization must be converted from USD to three additional currencies: British Pound (GBP), Euro (EUR), and Indian Rupee (INR) to serve international stakeholders.
+* **Data Enrichment:** The market capitalization must be converted from USD to three additional currencies: British Pound (GBP), Euro (EUR), and Philippine Peso (PHP) to serve international stakeholders.
 * **Data Accessibility:** The final, processed data must be delivered in two formats:
     * A **CSV file** for quick, ad-hoc analysis by analysts using tools like Excel.
     * A **SQLite database** to serve as a stable, queryable source for potential future dashboards or applications.
@@ -48,7 +48,7 @@ Rationale: This publicly available source provides a regularly updated, structur
 ## ETL Process
 The technical ETL pipeline is designed to directly meet the defined business requirements.
 * **Extraction:** This phase fulfills the requirement of sourcing the data. The script targets the specific HTML table containing the relevant financial information, ensuring only the required data points (Bank Name, Market Cap) are captured.
-* **Transformation:** This is the data enrichment phase. It applies the core business logic by converting the USD market cap into GBP, EUR, and INR. This step adds value by making the data immediately usable for analysts working with different regional clients without needing manual conversions.
+* **Transformation:** This is the data enrichment phase. It applies the core business logic by converting the USD market cap into GBP, EUR, and PHP. This step adds value by making the data immediately usable for analysts working with different regional clients without needing manual conversions.
 * **Loading:** This phase focuses on data delivery. By creating both a CSV and a database table, we serve two different user needs. The CSV offers flexibility, while the database provides structure and scalability for more advanced analytics.
 
 
@@ -77,15 +77,12 @@ The project delivered the following key assets:
 
 
 
-## Business Value & Future Enhancements
+## Business Value
 **Value Delivered:**
 * **Increased Efficiency:** Eliminates hours of manual data collection and processing.
 * **Improved Data Accuracy:** Reduces the risk of human error in data entry and currency conversion.
 * **Enhanced Decision-Making:** Provides analysts with timely, reliable data to support client recommendations.
-**Potential Next Steps:**
-* **Historical Trend Analysis:** Schedule the script to run quarterly to build a historical dataset, enabling trend analysis of market capitalization over time.
-* **Dashboard Integration:** Connect a BI tool (like Power BI or Tableau) to the SQLite database to create an interactive dashboard for visualizing market share and competitive rankings.
-* **Parameterization:** Enhance the script to allow users to specify the number of banks to extract (e.g., top 20 instead of top 10) or to add new currency conversions as needed.
+
 
 
 
@@ -112,7 +109,6 @@ import os
 
 # --- Global Variables ---
 URL = 'https://en.wikipedia.org/wiki/List_of_largest_banks'
-EXCHANGE_RATE_CSV_PATH = 'https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-SkillsNetwork-PY0221EN-Coursera/labs/v2/exchange_rate.csv'
 
 # use a subfolder for all generated files
 OUTPUT_DIR = './output'
@@ -124,7 +120,7 @@ TABLE_NAME = 'Largest_banks'
 LOG_FILE = os.path.join(OUTPUT_DIR, 'code_log.txt')
 
 TABLE_ATTRIBUTES = ['Name', 'MC_USD_Billion']
-FINAL_TABLE_ATTRIBUTES = ['Name', 'MC_USD_Billion', 'MC_GBP_Billion', 'MC_EUR_Billion', 'MC_INR_Billion']
+FINAL_TABLE_ATTRIBUTES = ['Name', 'MC_USD_Billion', 'MC_GBP_Billion', 'MC_EUR_Billion', 'MC_PHP_Billion']
 ```
 
 
@@ -187,29 +183,24 @@ def extract(url, table_attribs):
 
 
 ### Task 3: The Transformation Function (transform)
-This Transform function enriches the data. It uses a hardcoded dictionary of exchange rates to calculate and add new columns for the market cap in GBP, EUR, and INR.
+This Transform function enriches the data. It uses a hardcoded dictionary of exchange rates to calculate and add new columns for the market cap in GBP, EUR, and PHP.
 
 ```python
 # --- Task 3: Transformation Function ---
-def transform(df, csv_path=None):  # csv_path is no longer needed but kept for consistency
+def transform(df):
     """
-    Transforms the dataframe by adding market capitalization in GBP, EUR, and INR.
-    The exchange rates are now hardcoded to remove dependency on the broken URL.
+    Transforms the dataframe by adding market capitalization in GBP, EUR, and PHP.
+    The exchange rates are now hardcoded to remove dependency on external CSV.
     """
-    # Exchange rates as of late 2024/early 2025 (for project consistency)
     exchange_rate_dict = {
-        'GBP': 0.8,
-        'EUR': 0.93,
-        'INR': 83.33
+        'GBP': 0.8,     # 1 USD ≈ 0.80 GBP
+        'EUR': 0.93,    # 1 USD ≈ 0.93 EUR
+        'PHP': 58     # 1 USD ≈ 58 PHP (approx early 2025 rate)
     }
 
-    gbp_rate = exchange_rate_dict['GBP']
-    eur_rate = exchange_rate_dict['EUR']
-    inr_rate = exchange_rate_dict['INR']
-    
-    df['MC_GBP_Billion'] = round(df['MC_USD_Billion'] * gbp_rate, 2)
-    df['MC_EUR_Billion'] = round(df['MC_USD_Billion'] * eur_rate, 2)
-    df['MC_INR_Billion'] = round(df['MC_USD_Billion'] * inr_rate, 2)
+    df['MC_GBP_Billion'] = round(df['MC_USD_Billion'] * exchange_rate_dict['GBP'], 2)
+    df['MC_EUR_Billion'] = round(df['MC_USD_Billion'] * exchange_rate_dict['EUR'], 2)
+    df['MC_PHP_Billion'] = round(df['MC_USD_Billion'] * exchange_rate_dict['PHP'], 2)
     
     log_progress('Data transformation complete. Initiating loading process')
     return df
@@ -271,7 +262,7 @@ if __name__ == '__main__':
     print(extracted_data)
     print("-" * 30)
 
-    transformed_data = transform(extracted_data, EXCHANGE_RATE_CSV_PATH)
+    transformed_data = transform(extracted_data)
     print("\n--- Transformed Data (with additional currencies) ---")
     print(transformed_data)
     print("-" * 30)
@@ -322,19 +313,20 @@ Running the script produces the following output in the console, showing the suc
 | 10   | Goldman Sachs                           | 156.356        |
 
 
+
 #### Transformed Data (with additional currencies) 
-| Rank | Name                                    | MC_USD_Billion | MC_GBP_Billion | MC_EUR_Billion | MC_INR_Billion |
+| Rank | Name                                    | MC_USD_Billion | MC_GBP_Billion | MC_EUR_Billion | MC_PHP_Billion |
 |------|-----------------------------------------|----------------|----------------|----------------|----------------|
-| 1    | JPMorgan Chase                          | 599.931        | 479.94         | 557.94         | 49992.25       |
-| 2    | Bank of America                         | 307.900        | 246.32         | 286.35         | 25657.31       |
-| 3    | Industrial and Commercial Bank of China | 303.543        | 242.83         | 282.29         | 25294.24       |
-| 4    | Agricultural Bank of China              | 232.836        | 186.27         | 216.54         | 19402.22       |
-| 5    | Bank of China                           | 209.295        | 167.44         | 194.64         | 17440.55       |
-| 6    | China Construction Bank                 | 192.715        | 154.17         | 179.22         | 16058.94       |
-| 7    | Wells Fargo                             | 192.279        | 153.82         | 178.82         | 16022.61       |
-| 8    | HSBC                                    | 163.544        | 130.84         | 152.10         | 13628.12       |
-| 9    | Commonwealth Bank                       | 156.639        | 125.31         | 145.67         | 13052.73       |
-| 10   | Goldman Sachs                           | 156.356        | 125.08         | 145.41         | 13029.15       |
+| 1    | JPMorgan Chase                          | 599.931        | 479.94         | 557.94         | 34796.00       |
+| 2    | Bank of America                         | 307.900        | 246.32         | 286.35         | 17858.20       |
+| 3    | Industrial and Commercial Bank of China | 303.543        | 242.83         | 282.29         | 17605.49       |
+| 4    | Agricultural Bank of China              | 232.836        | 186.27         | 216.54         | 13504.49       |
+| 5    | Bank of China                           | 209.295        | 167.44         | 194.64         | 12139.11       |
+| 6    | China Construction Bank                 | 192.715        | 154.17         | 179.22         | 11177.47       |
+| 7    | Wells Fargo                             | 192.279        | 153.82         | 178.82         | 11152.18       |
+| 8    | HSBC                                    | 163.544        | 130.84         | 152.10         | 9485.55        |
+| 9    | Commonwealth Bank                       | 156.639        | 125.31         | 145.67         | 9085.06        |
+| 10   | Goldman Sachs                           | 156.356        | 125.08         | 145.41         | 9068.65        |
 
 
 
